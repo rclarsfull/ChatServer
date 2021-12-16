@@ -15,17 +15,19 @@ class Client{
         System.out.println("Verbindung zum Server wurde hergestellt.");
       } else {
         System.out.println("Es konnte keine Verbindung zum Server hergestellt werden.");
+        
       } // end of if-else
       connected=true; 
+      ClientDrucker drucker=new ClientDrucker(socket);
+      drucker.start();
+      
       
       while (connected) {
-        System.out.println(socket.readLine());
-        while (socket.dataAvailable()>0) { 
-          System.out.println(socket.read());
-        } // end of while
         input=in.next();
         if (input.equalsIgnoreCase("ende")) {
           connected=false;
+          socket.close();
+          break;
         } else {
           socket.write(input);
         } // end of if-else

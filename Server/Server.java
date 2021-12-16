@@ -17,15 +17,26 @@ class Server{
   
   
   void starteServer(){
+    createLobby("test",123);
     while (true) { 
-      ClientThread temp=new ClientThread(serverSocket.accept());
-      temp.start();
-      clients.add(temp);
+      try {
+        ClientThread temp=new ClientThread(serverSocket.accept(),this);
+        temp.start();
+        clients.add(temp);
+      } catch(Exception e) {
+        
+      } 
+      
+      
       } // end of while
     }
   
   public void createLobby(String name, int pass){
     lobbys.add(new Lobby(name,pass));
+    }
+  
+  public ArrayList<Lobby> getLobbys(){
+     return lobbys;
     }
   
   

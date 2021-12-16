@@ -3,31 +3,66 @@ class ClientThread extends Thread{
   String name;
   Socket socket;
   Lobby lobby;
-  ArrayList<Lobby> lobbys;
+  Server server;
   
   
-  ClientThread(Socket socket,ArrayList<Lobby> lobbys){
+  ClientThread(Socket socket,Server server){
     this.socket=socket;
-    this.lobbys=lobbys;
+    this.server=server;
   }
   
   
-  public void run(){
+  public void run() {
     String text="Willkommen im Vorraum, waehlen sie eine der folgenden Lobbys:\n";
-    for (int i=0;i<lobbys.size();i++) {
-      text+=(i+1)+": "+lobbys.get(i).getName();
+    for (int i=0;i<server.getLobbys().size();i++) {
+      text+=(i+1)+": "+server.getLobbys().get(i).getName();
     } // end of for
-    socket.write(text);
-    int auswahl=socket.read();
-    lobby=lobbys.get(auswahl);
-    socket.write("\nGeben Sie ihren Namen ein: ");
-    socket.readLine();
     
+    try {
+      socket.write(text);
+      int auswahl=socket.read();
+      lobby=server.getLobbys().get(auswahl);
+      socket.write("\nGeben Sie ihren Namen ein: ");
+      socket.readLine();
+      
+      
+      text="Sie sind jetzt mit der Lobby: "+lobby.getName()+" verbunden.";
+      socket.write(text);
+      lobby.addClientThread(this);
+      
+      
+      while (true) { 
+        String message=socket.readLine();
+        sendMessage(message);
+      } // end of while
+    } catch(Exception e) {
+      
+    } finally {
+      
+    } // end of try
     
-    text="Sie sind jetzt mit der Lobby: "+lobby.getName()+" verbunden.";
-    socket.write(text);
-    lobby.addClientThread(this);
   }
+  
+
+  
+  public String getClientName(){
+    return name;
+    }
+  
+  public void sendMessage(String m){
+    try {
+      socket.write(m);
+    } catch(Exception e) {
+      
+    } finally {
+      
+    } // end of try
+    }
+  
+  public void schreibeNachricht(String nachricht){
+     lobby.schreibeNachricht(new Nachricht(nachricht,this));
+    }
+    
   
   
   
