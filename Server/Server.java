@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-class Server{
+class Server extends Thread{
   private ArrayList<Lobby> lobbys;
   private ArrayList<ClientThread> clients;
   private ServerSocket serverSocket;
@@ -16,8 +16,7 @@ class Server{
     }
   
   
-  void starteServer(){
-    createLobby("test",123);
+  public void run(){
     while (true) { 
       try {
         ClientThread temp=new ClientThread(serverSocket.accept(),this);
@@ -32,12 +31,14 @@ class Server{
     }
   
   public void createLobby(String name, int pass){
-    lobbys.add(new Lobby(name,pass));
+    Lobby tempL=new Lobby(name,pass);
+    tempL.start();
+    lobbys.add(tempL);
     }
-  
+
   public ArrayList<Lobby> getLobbys(){
      return lobbys;
     }
-  
+ 
   
   }
