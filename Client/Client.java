@@ -13,23 +13,33 @@ class Client{
       Socket socket=new Socket(ip,port);
       if (socket.connect()) {
         System.out.println("Verbindung zum Server wurde hergestellt.");
+        connected=true; 
+        ClientDrucker drucker=new ClientDrucker(socket);
+      drucker.start();
       } else {
         System.out.println("Es konnte keine Verbindung zum Server hergestellt werden.");
-        
+        connected=false; 
       } // end of if-else
-      connected=true; 
-      ClientDrucker drucker=new ClientDrucker(socket);
-      drucker.start();
+      
       
       
       while (connected) {
-        input=in.next();
-        if (input.equalsIgnoreCase("ende")) {
+        try {
+          Thread.sleep(100);
+        } catch (Exception e) {
+          //TODO: handle exception
+        }
+        System.out.print("->");
+        input=in.nextLine();
+       
+        if (input.equalsIgnoreCase("ende\n")) {
           connected=false;
           socket.close();
           break;
         } else {
-          socket.write(input);
+          //System.out.println(input);
+          socket.write(input+"\n");
+          input="";
         } // end of if-else
       } // end of while
     } catch(Exception e) {

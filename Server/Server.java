@@ -19,9 +19,10 @@ class Server extends Thread{
   public void run(){
     while (true) { 
       try {
-        ClientThread temp=new ClientThread(serverSocket.accept(),this);
+        ClientThread temp=new ClientThread(serverSocket.accept(),this,lobbys.get(0));
         temp.start();
         clients.add(temp);
+        System.out.println("Client Thread started");
       } catch(Exception e) {
         
       } 
@@ -34,6 +35,7 @@ class Server extends Thread{
     Lobby tempL=new Lobby(name,pass);
     tempL.start();
     lobbys.add(tempL);
+    System.out.println("Lobby Created");
     }
 
   public ArrayList<Lobby> getLobbys(){

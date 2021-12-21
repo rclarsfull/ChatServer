@@ -18,11 +18,21 @@ class Lobby extends Thread{
   
   public void run(){
     while (true) { 
+      //System.out.println("Gameloop Lobby"+newNachrichten.size());
+      try {
+        Thread.sleep(300);
+      } catch(Exception e) {
+        
+      } finally {
+        
+      } // end of try
+      
       if (newNachrichten.size()>0) { 
+        System.out.println("Nachricht gesendet an alle"+newNachrichten.size());
         for (ClientThread c:clients) {
-          c.sendMessage(newNachrichten.getLast().toString());
+          c.sendMessage(newNachrichten.getFirst().toString());
         } // end of for
-        newNachrichten.removeLast();
+        newNachrichten.removeFirst();
       } 
     } // end of while
   } // end of for

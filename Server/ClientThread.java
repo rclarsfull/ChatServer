@@ -6,9 +6,10 @@ class ClientThread extends Thread{
   Server server;
   
   
-  ClientThread(Socket socket,Server server){
+  ClientThread(Socket socket,Server server, Lobby lobby){
     this.socket=socket;
     this.server=server;
+    this.lobby=lobby;
   }
   
   
@@ -23,21 +24,23 @@ class ClientThread extends Thread{
 //      int auswahl=socket.read();
 //      lobby=server.getLobbys().get(auswahl);
       
-      socket.write("\nGeben Sie ihren Namen ein: ");
+      socket.write("Geben Sie ihren Namen ein: \n");
       name=socket.readLine();
+      System.out.println("Empfangen");
       
       
-      text="Sie sind jetzt mit der Lobby: "+lobby.getName()+" verbunden.";
+      text="Sie sind jetzt mit der Lobby: "+lobby.getLobbyName()+" verbunden. \n";
       socket.write(text);
       lobby.addClientThread(this);
       
       
-      while (true) { 
+      while (true) {    
+        //System.out.println("Loop");
         String message=socket.readLine();
-        sendMessage(message);
+        schreibeNachricht(message);
       } // end of while
     } catch(Exception e) {
-      System.out.println("Fehler zu begin");
+      System.out.println("Fehler in ClientThread");
     } finally {
       
     } // end of try
@@ -52,7 +55,8 @@ class ClientThread extends Thread{
   
   public void sendMessage(String m){
     try {
-      socket.write(m);
+      socket.write(m+"\n");
+      System.out.println("Client Thread hat gesendet");
     } catch(Exception e) {
       System.out.println("Fehler beim senden einer Nachricht");
     } finally {
@@ -62,7 +66,9 @@ class ClientThread extends Thread{
   
   public void schreibeNachricht(String nachricht){
      lobby.schreibeNachricht(new Nachricht(nachricht,this));
+     System.out.println("nachricht übergeben");
     }
+  
     
   
   
