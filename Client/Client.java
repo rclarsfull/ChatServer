@@ -2,8 +2,8 @@ import java.util.Scanner;
 class Client{
   
   public static void main(String[] args){
-    String name="test";//args[0];
-    String ip="127.0.0.1";//args[1];
+    String name=args[0];
+    String ip=args[1];
     int port=10000;//Integer.parseInt(args[2]);
     boolean connected=false;
     Scanner in =new Scanner(System.in);
